@@ -116,19 +116,12 @@ class RRuleGenerator extends StatelessWidget {
       final instances = int.tryParse(instancesController.text) ?? 0;
       return 'RRULE:${periodWidgets[frequencyNotifier.value].getRRule()};COUNT=${instances > 0 ? instances : 1}$excludeDates';
     }
-
     final pickedDate = pickedDateNotifier.value;
 
-    // Check if the selected day is 32 (representing "Last day of the month")
-    final dayValue = pickedDate.day == 32
-        ? 'LAST'
-        : pickedDate.day > 9
-            ? '${pickedDate.day}'
-            : '0${pickedDate.day}';
+    final day = pickedDate.day > 9 ? '${pickedDate.day}' : '0${pickedDate.day}';
     final month = pickedDate.month > 9 ? '${pickedDate.month}' : '0${pickedDate.month}';
 
-    // Handle "Last day of the month" in the rule
-    return pickedDate.day == 32 ? 'RRULE:${periodWidgets[frequencyNotifier.value].getRRule()};BYMONTHDAY=-1$excludeDates' : 'RRULE:${periodWidgets[frequencyNotifier.value].getRRule()};UNTIL=${pickedDate.year}$month$dayValue$excludeDates';
+    return 'RRULE:${periodWidgets[frequencyNotifier.value].getRRule()};UNTIL=${pickedDate.year}$month$day$excludeDates';
   }
 
   @override

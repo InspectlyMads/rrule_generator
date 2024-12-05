@@ -78,12 +78,12 @@ class Monthly extends StatelessWidget implements Period {
   @override
   String getRRule() {
     if (monthTypeNotifier.value == 0) {
-      final byMonthDay = dayNotifier.value;
+      final byMonthDay = dayNotifier.value == 32 ? -1 : dayNotifier.value; // Handle "Last day"
       final interval = int.tryParse(intervalController.text) ?? 0;
       return 'FREQ=MONTHLY;BYMONTHDAY=$byMonthDay;INTERVAL=${interval > 0 ? interval : 1}';
     } else {
-      final byDay = weekdaysShort[weekdayNotifier.value];
-      final bySetPos = (monthDayNotifier.value < 4) ? monthDayNotifier.value + 1 : -1;
+      final byDay = weekdaysShort[weekdayNotifier.value]; // e.g., "MO" for Monday
+      final bySetPos = (monthDayNotifier.value < 4) ? monthDayNotifier.value + 1 : -1; // Week position
       final interval = int.tryParse(intervalController.text) ?? 0;
       return 'FREQ=MONTHLY;INTERVAL=${interval > 0 ? interval : 1};'
           'BYDAY=$byDay;BYSETPOS=$bySetPos';
